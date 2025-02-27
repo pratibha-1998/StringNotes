@@ -1,0 +1,469 @@
+Strings in Java - From Zero to Hero
+1. Introduction to Strings
+A String is a sequence of characters.
+Java provides the String class in java.lang package.
+Strings are immutable (cannot be changed after creation).
+Creating a String
+java
+Copy
+Edit
+String str1 = "Hello";  // String literal
+String str2 = new String("Hello");  // Using new keyword
+str1 is stored in the String Pool.
+str2 is stored in the Heap separately.
+2. String Immutability
+Once a string is created, it cannot be changed.
+Any modification creates a new string object.
+Example:
+
+java
+Copy
+Edit
+String s = "Hello";
+s = s + " World";  // New string created, old one is discarded
+Why Immutable?
+
+Security (used in passwords, networking)
+Caching and Performance (String Pool)
+Thread Safety (Multiple threads can use without issues)
+3. String Pool (Memory Optimization)
+Java stores string literals in a special memory area called String Pool.
+When a new literal string is created, Java first checks if it already exists in the pool.
+Example:
+
+java
+Copy
+Edit
+String s1 = "Java"; 
+String s2 = "Java"; 
+System.out.println(s1 == s2);  // true (same reference)
+Using new:
+
+java
+Copy
+Edit
+String s3 = new String("Java"); 
+System.out.println(s1 == s3);  // false (different objects)
+4. String Methods
+Java provides many useful methods in the String class.
+
+Common Methods
+Method	Description
+length()	Returns string length
+charAt(index)	Returns char at given index
+concat(str)	Joins two strings
+toUpperCase()	Converts to uppercase
+toLowerCase()	Converts to lowercase
+trim()	Removes spaces from both ends
+substring(start, end)	Extracts part of a string
+indexOf(str)	Finds the index of first occurrence
+lastIndexOf(str)	Finds last occurrence
+replace(old, new)	Replaces a part of the string
+split(delimiter)	Splits a string into an array
+contains(str)	Checks if string contains substring
+equals(str)	Checks exact equality
+equalsIgnoreCase(str)	Checks equality ignoring case
+Example Usage
+java
+Copy
+Edit
+String str = "  Java Programming  ";
+System.out.println(str.length());  // 19
+System.out.println(str.charAt(3)); // a
+System.out.println(str.toUpperCase()); // "JAVA PROGRAMMING"
+System.out.println(str.trim());  // "Java Programming"
+System.out.println(str.replace("Java", "Python")); // "Python Programming"
+System.out.println(str.contains("Java"));  // true
+5. String Comparison
+Using == vs .equals()
+== compares references (memory address).
+.equals() compares values.
+java
+Copy
+Edit
+String s1 = "Hello";
+String s2 = new String("Hello");
+
+System.out.println(s1 == s2);  // false (different objects)
+System.out.println(s1.equals(s2));  // true (same content)
+6. StringBuilder & StringBuffer (Mutable Strings)
+StringBuilder and StringBuffer allow modifications without creating new objects.
+StringBuffer is synchronized (thread-safe).
+StringBuilder is faster (not synchronized).
+Example: Using StringBuilder
+java
+Copy
+Edit
+StringBuilder sb = new StringBuilder("Hello");
+sb.append(" World");
+System.out.println(sb);  // "Hello World"
+StringBuffer Example
+java
+Copy
+Edit
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");
+System.out.println(sb);  // "Hello World"
+Feature	String	StringBuilder	StringBuffer
+Mutable?	No	Yes	Yes
+Thread-safe?	Yes	No	Yes
+Performance	Slow	Fast	Slower
+7. String Formatting
+String.format() helps format strings dynamically.
+java
+Copy
+Edit
+String name = "John";
+int age = 25;
+String formatted = String.format("My name is %s and I am %d years old", name, age);
+System.out.println(formatted);
+Output:
+My name is John and I am 25 years old
+
+Format Specifier	Description
+%s	String
+%d	Integer
+%f	Floating-point number
+%c	Character
+8. String Tokenization (Splitting Strings)
+split() method is used for tokenizing a string.
+java
+Copy
+Edit
+String str = "Java,Python,C++";
+String[] languages = str.split(",");
+for (String lang : languages) {
+    System.out.println(lang);
+}
+Output:
+
+mathematica
+Copy
+Edit
+Java
+Python
+C++
+9. String Reverse
+Using StringBuilder
+java
+Copy
+Edit
+String str = "Java";
+String reversed = new StringBuilder(str).reverse().toString();
+System.out.println(reversed); // "avaJ"
+Using Loop
+java
+Copy
+Edit
+String str = "Java";
+String rev = "";
+for (int i = str.length() - 1; i >= 0; i--) {
+    rev += str.charAt(i);
+}
+System.out.println(rev);  // "avaJ"
+10. Palindrome Check
+A palindrome is a string that reads the same forward and backward.
+
+java
+Copy
+Edit
+public static boolean isPalindrome(String str) {
+    String rev = new StringBuilder(str).reverse().toString();
+    return str.equals(rev);
+}
+
+System.out.println(isPalindrome("madam"));  // true
+System.out.println(isPalindrome("hello"));  // false
+11. Anagram Check
+Two strings are anagrams if they contain the same characters in a different order.
+
+java
+Copy
+Edit
+import java.util.Arrays;
+
+public static boolean isAnagram(String str1, String str2) {
+    char[] arr1 = str1.toCharArray();
+    char[] arr2 = str2.toCharArray();
+    Arrays.sort(arr1);
+    Arrays.sort(arr2);
+    return Arrays.equals(arr1, arr2);
+}
+
+System.out.println(isAnagram("listen", "silent"));  // true
+System.out.println(isAnagram("hello", "world"));  // false
+12. Substring Check (Sliding Window)
+To check if s2 is a substring of s1:
+
+java
+Copy
+Edit
+public static boolean isSubstring(String s1, String s2) {
+    return s1.contains(s2);
+}
+System.out.println(isSubstring("hello world", "world"));  // true
+13. Count Character Occurrences
+java
+Copy
+Edit
+public static int countOccurrences(String str, char ch) {
+    return (int) str.chars().filter(c -> c == ch).count();
+}
+System.out.println(countOccurrences("banana", 'a'));  // 3
+
+
+===========================================================================================
+
+4. Find the First Non-Repeating Character
+Scenario:
+Find the first character in a string that does not repeat.
+
+Solution: Using HashMap
+java
+Copy
+Edit
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public static char firstNonRepeatingChar(String str) {
+    Map<Character, Integer> countMap = new LinkedHashMap<>();
+    for (char ch : str.toCharArray()) {
+        countMap.put(ch, countMap.getOrDefault(ch, 0) + 1);
+    }
+    for (Map.Entry<Character, Integer> entry : countMap.entrySet()) {
+        if (entry.getValue() == 1) return entry.getKey();
+    }
+    return '_'; // No unique character found
+}
+Example:
+firstNonRepeatingChar("swiss") → 'w'
+firstNonRepeatingChar("aabb") → '_'
+
+5. Count Occurrences of Each Character in a String
+Scenario:
+Count the frequency of each character in a string.
+
+Solution: Using HashMap
+java
+Copy
+Edit
+import java.util.HashMap;
+
+public static void countCharacterFrequency(String str) {
+    HashMap<Character, Integer> map = new HashMap<>();
+    for (char ch : str.toCharArray()) {
+        map.put(ch, map.getOrDefault(ch, 0) + 1);
+    }
+    System.out.println(map);
+}
+Example:
+countCharacterFrequency("banana") → {b=1, a=3, n=2}
+
+6. Remove Duplicates from a String
+Scenario:
+Remove all duplicate characters and return a string with unique characters.
+
+Solution: Using HashSet
+java
+Copy
+Edit
+import java.util.LinkedHashSet;
+
+public static String removeDuplicates(String str) {
+    LinkedHashSet<Character> set = new LinkedHashSet<>();
+    for (char ch : str.toCharArray()) {
+        set.add(ch);
+    }
+    StringBuilder sb = new StringBuilder();
+    for (char ch : set) {
+        sb.append(ch);
+    }
+    return sb.toString();
+}
+Example:
+removeDuplicates("banana") → "ban"
+
+7. Check if a String Contains Only Digits
+Scenario:
+Verify if a string consists only of numbers.
+
+Solution: Using Regular Expressions
+java
+Copy
+Edit
+public static boolean isNumeric(String str) {
+    return str.matches("\\d+");
+}
+Example:
+isNumeric("12345") → true
+isNumeric("123a5") → false
+
+8. Find the Longest Common Prefix
+Scenario:
+Given an array of strings, find the longest common prefix.
+
+Solution: Sorting Approach
+java
+Copy
+Edit
+import java.util.Arrays;
+
+public static String longestCommonPrefix(String[] strs) {
+    if (strs.length == 0) return "";
+    Arrays.sort(strs);
+    String first = strs[0], last = strs[strs.length - 1];
+    int i = 0;
+    while (i < first.length() && first.charAt(i) == last.charAt(i)) i++;
+    return first.substring(0, i);
+}
+Example:
+longestCommonPrefix(["flower", "flow", "flight"]) → "fl"
+
+9. Print All Substrings of a String
+Scenario:
+Print all possible substrings of a given string.
+
+Solution: Using Nested Loops
+java
+Copy
+Edit
+public static void printSubstrings(String str) {
+    for (int i = 0; i < str.length(); i++) {
+        for (int j = i + 1; j <= str.length(); j++) {
+            System.out.println(str.substring(i, j));
+        }
+    }
+}
+Example:
+printSubstrings("abc")
+Output: a, ab, abc, b, bc, c
+
+10. Check if Two Strings are Rotations of Each Other
+Scenario:
+Check if one string is a rotation of another.
+
+Solution:
+java
+Copy
+Edit
+public static boolean isRotation(String s1, String s2) {
+    return s1.length() == s2.length() && (s1 + s1).contains(s2);
+}
+Example:
+isRotation("abcde", "cdeab") → true
+isRotation("hello", "lohel") → true
+isRotation("abc", "acb") → false
+
+11. Find the Longest Palindromic Substring (Dynamic Programming)
+Scenario:
+Find the longest substring that is a palindrome.
+
+Solution: Expand Around Center
+java
+Copy
+Edit
+public static String longestPalindrome(String s) {
+    if (s.length() < 1) return "";
+    int start = 0, end = 0;
+    for (int i = 0; i < s.length(); i++) {
+        int len1 = expandFromCenter(s, i, i);
+        int len2 = expandFromCenter(s, i, i + 1);
+        int len = Math.max(len1, len2);
+        if (len > end - start) {
+            start = i - (len - 1) / 2;
+            end = i + len / 2;
+        }
+    }
+    return s.substring(start, end + 1);
+}
+
+private static int expandFromCenter(String s, int left, int right) {
+    while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+        left--; right++;
+    }
+    return right - left - 1;
+}
+Example:
+longestPalindrome("babad") → "bab" or "aba"
+
+===========================================================================================================
+
+Scenario 1: String Immutability
+java
+Copy
+Edit
+public class Test {
+    public static void main(String[] args) {
+        String s1 = "Hello";
+        s1.concat(" World");
+        System.out.println(s1);
+    }
+}
+Output?
+➡ Hello
+
+Explanation: Strings are immutable in Java, so s1.concat(" World") does not modify s1. It returns a new string, but since we are not storing it, the original s1 remains unchanged.
+
+Scenario 2: String Reference Comparison (== vs .equals())
+java
+Copy
+Edit
+public class Test {
+    public static void main(String[] args) {
+        String s1 = "Java";
+        String s2 = "Java";
+        String s3 = new String("Java");
+        
+        System.out.println(s1 == s2);
+        System.out.println(s1 == s3);
+        System.out.println(s1.equals(s3));
+    }
+}
+Output?
+➡ true
+➡ false
+➡ true
+
+Explanation:
+
+s1 == s2 → true (Both refer to the same object in the string pool)
+s1 == s3 → false (s3 is created with new, so it is a different object)
+s1.equals(s3) → true (Values are the same)
+Scenario 3: StringBuilder Mutability
+java
+Copy
+Edit
+public class Test {
+    public static void main(String[] args) {
+        StringBuilder sb = new StringBuilder("Hello");
+        sb.append(" World");
+        System.out.println(sb);
+    }
+}
+Output?
+➡ Hello World
+
+Explanation: Unlike String, StringBuilder is mutable, so append() modifies the original object.
+
+===========================================================================================================================
+
+Scenario 15: String Concatenation Order
+java
+Copy
+Edit
+public class Test {
+    public static void main(String[] args) {
+        System.out.println(10 + 20 + "Java" + 10 + 20);
+    }
+}
+Output?
+➡ 30Java1020
+
+Explanation:
+
+10 + 20 = 30 (integer addition)
+30 + "Java" → "30Java" (string concatenation starts)
+"30Java" + 10 → "30Java10"
+"30Java10" + 20 → "30Java1020"
+
+=======================================================================================================================
